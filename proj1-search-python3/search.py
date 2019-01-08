@@ -18,7 +18,6 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
-from util import Stack, Queue
 
 
 class SearchProblem:
@@ -84,13 +83,29 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
+    """
 
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
 
-    a = Stack.push(b)
+    closed = set()
+    stack = util.Stack()
+    directions = []
+
+    stack.push((problem.getStartState(), directions))
+
+    while not stack.isEmpty():
+        state, directions = stack.pop()
+
+        if problem.isGoalState(state):
+            return directions
+
+        if state not in closed:
+            closed.add(state)
+
+            for next, direction, cost in problem.getSuccessors(state):
+                stack.push((next, directions + [direction]))
 
     util.raiseNotDefined()
 
